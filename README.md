@@ -33,6 +33,8 @@ Collaborating on python project
 
 📬 Let's Connect
 
+Linkdin:
+Instagram:
 Email: dadi29skl@gmail.com
 Location: Rwanda
 Instagram: @dadishimwe
