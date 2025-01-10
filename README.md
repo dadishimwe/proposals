@@ -34,7 +34,7 @@ Collaborating on python project
 📬 Let's Connect
 
 Linkdin: https://www.linkedin.com/in/dadi-ishimwe-473a50275
-Instagram:
+Instagram: https://www.instagram.com/dadishimwe?igsh=dWpnMHN1b2VxcW9n
 Email: dadi29skl@gmail.com
 Location: Rwanda
 Instagram: @dadishimwe
