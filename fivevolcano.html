@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .quotation-info {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .goals-section {
+      background: #1a2942;
+      color: white;
+      padding: 2rem;
+    }
+
+    .options-section {
+      padding: 2rem;
+      background: #fff;
+    }
+
+    .option-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .option-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .option-card h3 {
+      color: #1a2942;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #ff6b00;
+    }
+
+    .option-card ul {
+      list-style: none;
+    }
+
+    .option-card li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .option-card li:before {
+      content: "•";
+      color: #ff6b00;
+      position: absolute;
+      left: 0;
+    }
+
+    .solution-section {
+      background: #f8f9fa;
+      padding: 2rem;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .solution-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .solution-item h4 {
+      color: #ff6b00;
+      margin-bottom: 0.5rem;
+    }
+
+    .package-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .package-table th {
+      background: #ff6b00;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .package-table th:last-child,
+    .package-table td:last-child {
+      text-align: right;
+    }
+
+    .package-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    .input-qty {
+      width: 80px;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .notice-section {
+      background: #1a2942;
+      color: white;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .notes-section {
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+
+    .note {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .total-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: #1a2942;
+      color: white;
+    }
+
+    .total-section h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .total-section p {
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      color: #1a2942;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #ff6b00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="zuba.png" alt="ZUBA" class="logo" style="width: 25%; height: auto">
+      <img src="fivevolcano.png" class="logo" style="width: 16%; height: auto">
+    </header>
+
+    <div class="quotation-info">
+        <div>
+            <p>         ZUBA BROADBAND LTD</p>
+            <p>         22 KG 548 STREET</p>
+            <p>         KACYIRU, KIGALI</p>
+            <p>         0790 099 777</p>
+            </div>  
+      <div>
+        <h3>Addressed To:</h3>
+        <p><b>Company Name:</b> Five Volcanoes Boutique hotel</p>
+        <p><b>Company Address:</b> Ruhengeri</p>
+        <p><b>Attn:</b> Robert Tumwebaze</p><!--Due to who it is addressed-->
+        <p><b>Mobile Number:</b> +250 788 302 040</p>
+        <p><b>Email:</b> twibazerobbie@gmail.com</p>
+      </div>
+      <div>
+        <p><b>No.:</b> RW-MUS-EN-FVB-160125.1</p>
+        <p><b>Date:</b> 16/01/2025</p>
+        <!--<p><b>Currency:</b> USD Payable in RWF</p>-->
+        <p><b>Validity:</b> 30 Days</p>
+        <p><b>Contact Person:</b> Fred Rwigamba</p>
+        <p><b>Mobile Number:</b> +250 785 429 940</p>
+        <p><b>Email:</b> fred.rwigamba@zubabroadband.com</p>
+      </div>
+    </div>
+
+    <div class="goals-section">
+        <p><b>ZUBA BROADBAND ENTERPRISE STARLINK QUOTATION</b></p>
+      <!--<h2>Our Understanding of Your Goals</h2>
+      <p>1. To secure reliable, fast internet for key business objectives, such as group video calls, security footage uploaded to the cloud, and financial transaction reliability and security.</p>
+      <p>2. To connect all 36 branches in Rwanda, regardless of location or proximity to infrastructure.</p>-->
+    </div>
+
+    <div class="options-section">
+      <h2 class="section-title">Equipment and Services:</h2>
+      <div class="option-cards">
+        <div class="option-card">
+          <p><strong>Enterprise Performance kit: unlimited package, faster speeds and greater reliability than Standard Starlink dishes</strong></p><br>
+          <ul>
+            <li>All installation, including mounts and cabling.</li>
+            <li>Site visits to confirm ideal installation method for best performance.</li>
+            <li>Unlimited monthly data at download speeds of up to 220 Mbps, with 1 TB of monthly Priority Data.</li><!--removal of one point-->
+            <li>Monthly data usage and performance reports and system health checks.</li>
+            <li>Public IP 24/7 service and maintenance, including replacement of problematic hardware at no cost, for the duration of the contract.</li>
+            <li>Flexibility to change monthly plans.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="solution-section">
+      <h2 class="section-title">Our Solution</h2>
+      <div class="solution-grid">
+        <div class="solution-item">
+          <h4>Simple</h4>
+          <p>No up-front costs: Equipment, installation, maintenance, 24/7 customer care, and Priority Data service plans all included in one monthly price.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Flexible</h4>
+          <p>You can change data plans at any time, on a site- or branch-specific basis.</p><!--Change of plans require charge-->
+        </div>
+        <div class="solution-item">
+          <h4>Measurable</h4>
+          <p>We provide monthly detailed usage reports and system health checks on request and site-specific basis.</p><!--on request and-->
+        </div>
+        <div class="solution-item">
+          <h4>Available Anywhere</h4>
+          <p>We can provide service anywhere in and around the Country.</p><!--removal of first part and added in and around-->
+        </div>
+      </div>
+    </div>
+    <h2 class="section-title">Enterprise Performance - Price per month</h2>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Unit Price (RWF)</th>
+          <th>Quantity</th>
+          <!--<th>Excise (15%)</th>
+          <th>Tax (18%)</th>-->
+          <th>Total (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Five Volcanoes Boutique hotel</td>
+          <td>1 TB Package - Priority</td>
+          <td>675,000 Rwf</td>
+          <td>1</td>
+          <!--<td class="excise-total">$0.00</td>
+          <td class="tax-total">$0.00</td>-->
+          <td class="rowTotal">675,000 Rwf</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+
+    <div class="notice-section">
+      <!--<h3>NOTICE!</h3>
+      <p>Prices are quoted in USD but will be billed in RwF according to the then-prevailing exchange rate.</p>-->
+    </div>
+
+    <div class="notes-section">
+      <h2 class="section-title">Important Notes</h2>
+      <div class="note-item"><b>Note 1:</b>With this package, Five Volcanoes Boutique hotel can provide optimal internet standards for its users and operators, capable of handling all other high-bandwidth tasks.</div><!--removal of first sentence and change in specification and rest of wording-->
+      <div class="note-item"><b>Note 2:</b> Additional charges may apply for any extra network installations or other special requirements.</div><!--change in wording-->
+      <!--<div class="note-item"><b>Note 3:</b> Prices are in USD, payable in RWF at current exchange rates.</div>--><!--removal of exclusive of task due to note 7-->
+      <div class="note-item"><b>Note 3:</b> Quote based on a 36-month contract.</div><!--change in number of months-->
+      <div class="note-item"><b>Note 4:</b> Customer must ensure stable electrical power supply to the kit using UPS.</div><!--removal of stabilizer-->
+      <div class="note-item"><b>Note 5:</b> Order confirmation requires signed agreement and advance payment.</div>
+      <div class="note-item"><b>Note 6:</b> Prices subject to additional requirements and sales taxes (e.i. VAT).</div>
+      <div class="note-item"><b>Note 7:</b> Final price may vary based on installation complexity and location.</div> 
+      <div class="note-item"><b>Note 8:</b> Additional data usage charged at 350 Rwf per GB.</div>
+      <div class="note-item"><b>Note 9:</b> Prices are exclusive of Taxes</div><br>
+    <!--<div id="overage-calculator" class="note">
+        <h3>Data Overage Calculator</h3>
+        <p>Calculate additional costs for data overages:</p>
+        <input type="number" id="gb-over" placeholder="Enter GB over limit" min="0" style="padding: 0.5rem; margin: 1rem 0;">
+        <p>Cost: <span id="overage-cost">$0.00</span></p>
+      </div>-->
+  
+      <div class="total-section">
+        <!--<div>
+          <h2>Package Total</h2>
+          <p id="package-total">$0.00</p>
+        </div>
+        <div>
+          <h2>Data Overage</h2>
+          <p id="overage-total">$0.00</p>
+        </div>
+        <div>
+          <h2>Grand Total</h2>
+          <p id="grand-total">$0.00</p>
+        </div>-->
+      </div>
+  
+      <script>
+        document.querySelectorAll('.input-qty').forEach(input => {
+          input.addEventListener('input', updateTotals);
+        });
+  
+        document.getElementById('gb-over').addEventListener('input', calculateOverage);
+  
+        function updateTotals() {
+          let packageTotal = 0;
+          let overageTotal = 0;
+          let grandTotal = 0;
+  
+          // Calculate package total
+          document.querySelectorAll('.input-qty').forEach(input => {
+            const price = parseFloat(input.dataset.price);
+            const quantity = parseInt(input.value) || 0;
+            const rowTotal = price * quantity;
+            const excise = rowTotal * 0.15;
+            const tax = rowTotal * 0.18;
+            const totalWithTax = price * quantity;
+  
+            input.closest('tr').querySelector('.row-total').textContent = 
+              $${totalWithTax.toFixed(2)};
+            input.closest('tr').querySelector('.excise-total').textContent = 
+              $${excise.toFixed(2)};
+            input.closest('tr').querySelector('.tax-total').textContent = 
+              $${tax.toFixed(2)};
+  
+            packageTotal += totalWithTax;
+          });
+  
+          // Calculate overage total
+          const gbOver = parseFloat(document.getElementById('gb-over').value) || 0;
+          const overageCost = gbOver * 0.19;
+          overageTotal = overageCost;
+  
+          // Calculate grand total
+          grandTotal = packageTotal + overageTotal;
+  
+          // Update total sections
+          document.getElementById('package-total').textContent = 
+            $${packageTotal.toFixed(2)};
+          document.getElementById('overage-total').textContent = 
+            $${overageTotal.toFixed(2)};
+          document.getElementById('grand-total').textContent = 
+            $${grandTotal.toFixed(2)};
+        }
+  
+        function calculateOverage() {
+          const gbOver = parseFloat(document.getElementById('gb-over').value) || 0;
+          const overageCost = gbOver * 0.19;
+          document.getElementById('overage-cost').textContent = 
+            $${overageCost.toFixed(2)};
+          updateTotals();
+        }
+      </script>
+    </div>
+  </body>
+  </html>
