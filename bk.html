@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #333333;
+            --accent-color: #666666;
+            --light-gray: #f5f5f5;
+            --border-gray: #e0e0e0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 50%, var(--secondary-color) 50%);
+            z-index: 1;
+        }
+
+        .client-info {
+            background: white;
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .installation-details, .equipment-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-gray);
+        }
+
+        .network-topology {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 1px solid var(--border-gray);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-gray);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .procedure-steps {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 1px solid var(--border-gray);
+        }
+
+        .step {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--secondary-color);
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                padding: 0;
+            }
+            
+            .header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .client-info,
+            .installation-details,
+            .equipment-list,
+            .network-topology,
+            .procedure-steps {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Installation Report</h1>
+            <p>Technical Documentation & Network Setup Details</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="client-info">
+            <h2>Bank of Kigali</h2>
+            <div class="details-grid">
+                <div>
+                    <div class="info-item">
+                        <span class="info-label">Contact Person:</span>
+                        <span>Sadie</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Position:</span>
+                        <span>In-House IT Support</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone Number:</span>
+                        <span>250788654407</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span>sntezirizaza@bk.rw</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Installation Date:</span>
+                        <span>October 29, 2024</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">First Billing:</span>
+                        <span>November 28, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="network-topology">
+                <h3>Network Topology</h3>
+                <p>The network topology for Bank of Kigali includes a high-performance dish connected to a BK server uplink. </p>
+            </div>
+
+            <div class="details-grid">
+                <div class="installation-details">
+                    <h3>Installation Details</h3>
+                    <div class="info-item">
+                        <span class="info-label">Dish Type:</span>
+                        <span>High Performance Kit</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Serial Number:</span>
+                        <span>KITP00310112</span>
+                    </div>
+                </div>
+
+                <div class="equipment-list">
+                    <h3>Equipment Provided</h3>
+                    <ul>
+                        <li>High-Performance Dish</li>
+                        <!--<li>LNB</li>
+                        <li>Modem</li>
+                        <li>Power Supply Unit</li>-->
+                        <li>Provided long starlink cable.</li>
+                        <li>Mounting Pole and Hardware Kit</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="procedure-steps">
+                <h3>Installation Procedure</h3>
+                <div class="step">
+                    <h4>1. Site Survey (the day previous)</h4>
+                    <ul>
+                        <li>Conducted line of sight verification</li>
+                        <li>Identified optimal mounting location</li>
+                        <li>Verified power availability</li>
+                        <li>Provided mount for kit.</li>
+                    </ul>
+                </div>
+                <div class="step">
+                    <h4>2. Physical Installation</h4>
+                    <ul>
+                        <li>Mounted dish onto pole</li>
+                        <li>Assembled and secured dish</li>
+                        <li>Routed cable down chute.</li>
+                        <!--<li>Installed LNB with proper polarization</li>-->
+                    </ul>
+                </div>
+                <div class="step">
+                    <h4>3. Network Configuration</h4>
+                    <ul>
+                        <li>None in this case.</li>
+                        <!--<li>Configured modem settings for optimal performance</li>
+                        <li>Tested network connectivity and signal strength</li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
