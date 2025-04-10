@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Internet Data Usage Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        thead {
+            background-color: #f1f5f9;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .status-over {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .status-near {
+            background-color: #fef3c7;
+            color: #b45309;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .status-under {
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .category-heavy {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .category-growing {
+            background-color: #e0e7ff;
+            color: #4338ca;
+        }
+        .category-stable {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .category-light {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+            .page-break-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Client Internet Data Usage Report</h1>
+        <p class="text-lg text-gray-600">Analysis and Recommendations for Data Cap Adjustments</p>
+        <p class="text-sm text-gray-500 mt-2">Generated on <span id="currentDate"></span></p>
+    </header>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Executive Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h3 class="font-bold text-blue-800 mb-2">Network Overview</h3>
+                <p class="text-blue-600">Total clients: 13</p>
+                <p class="text-blue-600">Clients exceeding cap: 4</p>
+                <p class="text-blue-600">Clients below cap: 9</p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+                <h3 class="font-bold text-green-800 mb-2">Cost Optimization</h3>
+                <p class="text-green-600">Cap increase recommendations: 4</p>
+                <p class="text-green-600">Cap decrease recommendations: 1</p>
+                <p class="text-green-600">No change recommended: 8</p>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <h3 class="font-bold text-purple-800 mb-2">Usage Trends</h3>
+                <p class="text-purple-600">Increasing usage: 2 clients</p>
+                <p class="text-purple-600">Stable usage: 10 clients</p>
+                <p class="text-purple-600">Decreasing usage: 1 client</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Client Categorization</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="chart-container">
+                    <canvas id="clientCategoryChart"></canvas>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Category Definitions</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-center">
+                        <span class="pill category-heavy mr-2">Heavy Users</span>
+                        <span>Consistently using >1.5 TB monthly</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="pill category-growing mr-2">Growing Users</span>
+                        <span>Showing consistent increase in usage</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="pill category-stable mr-2">Stable Users</span>
+                        <span>Consistent usage within 20% fluctuation</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="pill category-light mr-2">Light Users</span>
+                        <span>Consistently using <50% of allocated data</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Usage Overview</h2>
+        <div class="chart-container">
+            <canvas id="usageOverviewChart"></canvas>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Client Data Usage Details</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>Mar</th>
+                        <th>Apr (Predicted)</th>
+                        <th>Current Cap</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Akagera Aviation St</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>398 GB</td>
+                        <td>406 GB</td>
+                        <td>365 GB</td>
+                        <td>390 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-light">Light User</span></td>
+                        <td>Lower to 500 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Akagera Aviation HP</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>1.95 TB</td>
+                        <td>1.93 TB</td>
+                        <td>2.11 TB</td>
+                        <td>2.00 TB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td><span class="pill category-heavy">Heavy User</span></td>
+                        <td>Increase to 2 TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Old Mutual</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>1.75 TB</td>
+                        <td>1.66 TB</td>
+                        <td>1.58 TB</td>
+                        <td>1.66 TB</td>
+                        <td>2 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-heavy">Heavy User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">BK HQ</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>1.512 TB</td>
+                        <td>3+ TB</td>
+                        <td>2 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-growing">Growing User</span></td>
+                        <td>Increase to 3+ TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Prime Insurance</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>298 GB</td>
+                        <td>937 GB</td>
+                        <td>2+ TB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-near">Near Cap</span></td>
+                        <td><span class="pill category-growing">Growing User</span></td>
+                        <td>Increase to 2+ TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Royal FM</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>1.19 TB</td>
+                        <td>1.5 TB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>Increase to 1.5-2 TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Avipro Rwanda</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>590 GB</td>
+                        <td>600 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Kivu Noir</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>258 GB</td>
+                        <td>471 GB</td>
+                        <td>550 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-growing">Growing User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Kiss FM</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>404 GB</td>
+                        <td>664 GB</td>
+                        <td>680 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Jibu</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>630 GB</td>
+                        <td>600 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Starbucks</td>
+                        <td>-</td>
+                        <td>812 GB</td>
+                        <td>657 GB</td>
+                        <td>873 GB</td>
+                        <td>726 GB</td>
+                        <td>780 GB</td>
+                        <td>770 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Question Coffee</td>
+                        <td>-</td>
+                        <td>337 GB</td>
+                        <td>963 GB</td>
+                        <td>1.12 TB</td>
+                        <td>865 GB</td>
+                        <td>945 GB</td>
+                        <td>900 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-near">Near Cap</span></td>
+                        <td><span class="pill category-stable">Stable User</span></td>
+                        <td>No change</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Hotel Talent P</td>
+                        <td>1.42 TB</td>
+                        <td>1.68 TB</td>
+                        <td>459 GB</td>
+                        <td>2.21 TB</td>
+                        <td>1.43 TB</td>
+                        <td>1.61 TB</td>
+                        <td>1.67 TB</td>
+                        <td>40 GB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td><span class="pill category-heavy">Heavy User</span></td>
+                        <td>Increase to 2 TB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Monthly Trend Analysis</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="chart-container">
+                <canvas id="heavyUsersChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="growingUsersChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Surplus/Deficit Analysis</h2>
+        <div class="chart-container">
+            <canvas id="surplusDeficitChart"></canvas>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Note: Calculation uses 1024 GB = 1 TB conversion rate</p>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Detailed Recommendations</h2>
+        
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <h3 class="font-bold text-red-700">Critical Adjustments Needed</h3>
+            <div class="mt-2">
+                <p class="mb-2"><span class="font-semibold">Hotel Talent P:</span> Currently at 40 GB cap but consistently using 1.4-2.2 TB. Urgent increase to 2 TB recommended to avoid service disruption.</p>
+                <p><span class="font-semibold">Akagera Aviation HP:</span> Consistently exceeding 1 TB cap by >90%. Immediate increase to 2 TB recommended.</p>
+            </div>
+        </div>
+        
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+            <h3 class="font-bold text-yellow-700">Monitoring Required</h3>
+            <div class="mt-2">
+                <p class="mb-2"><span class="font-semibold">Prime Insurance:</span> Dramatic growth from 298 GB to 937 GB. Recommend proactive increase to 2 TB.</p>
+                <p><span class="font-semibold">BK HQ:</span> Only one month of data but high usage (1.512 TB). Monitor next month and adjust cap accordingly.</p>
+                <p><span class="font-semibold">Royal FM:</span> Exceeding current cap. Recommend adjustment to 1.5-2 TB range.</p>
+            </div>
+        </div>
+        
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+            <h3 class="font-bold text-green-700">Cost Optimization Opportunities</h3>
+            <div class="mt-2">
+                <p><span class="font-semibold">Akagera Aviation St:</span> Consistently using ~40% of allocated data. Recommend decreasing cap to 500 GB for cost savings.</p>
+            </div>
+        </div>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+            <h3 class="font-bold text-blue-700">Stable Clients (No Changes Required)</h3>
+            <div class="mt-2">
+                <p>The following clients have appropriate data caps for their usage patterns: Old Mutual, Avipro Rwanda, Kivu Noir, Kiss FM, Jibu, Starbucks, Question Coffee.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Risk Assessment</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th>Risk Factor</th>
+                        <th>Impact</th>
+                        <th>Affected Clients</th>
+                        <th>Mitigation Strategy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Severe Data Cap Mismatch</td>
+                        <td class="text-red-600">High</td>
+                        <td>Hotel Talent P</td>
+                        <td>Immediate increase to appropriate data cap (2 TB)</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Consistent Overcap Usage</td>
+                        <td class="text-orange-600">Medium</td>
+                        <td>Akagera Aviation HP, Royal FM</td>
+                        <td>Increase data caps to match actual usage patterns</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Rapidly Growing Usage</td>
+                        <td class="text-orange-600">Medium</td>
+                        <td>Prime Insurance, Kivu Noir</td>
+                        <td>Proactive cap increases and close monthly monitoring</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Insufficient Historical Data</td>
+                        <td class="text-yellow-600">Medium-Low</td>
+                        <td>BK HQ, Royal FM, Avipro Rwanda, Jibu</td>
+                        <td>Continue data collection, review after 2-3 months</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Overprovisioning</td>
+                        <td class="text-green-600">Low</td>
+                        <td>Akagera Aviation St</td>
+                        <td>Adjust data cap downward to optimize costs</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-500 text-sm mt-10 mb-4">
+        <p>Client Internet Data Usage Report - Conversion rate: 1024 GB = 1 TB</p>
+    </footer>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Usage Overview Chart
+        const usageCtx = document.getElementById('usageOverviewChart').getContext('2d');
+        const usageOverviewChart = new Chart(usageCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Akagera Aviation St', 'Akagera Aviation HP', 'Old Mutual', 'BK HQ', 
+                    'Prime Insurance', 'Royal FM', 'Avipro Rwanda', 'Kivu Noir', 
+                    'Kiss FM', 'Jibu', 'Starbucks', 'Question Coffee', 'Hotel Talent P'
+                ],
+                datasets: [{
+                    label: 'March 2023 Usage (GB)',
+                    data: [365, 2110, 1580, 1512, 937, 1190, 590, 471, 664, 630, 780, 945, 1610],
+                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1
+                }, {
+                    label: 'Current Data Cap (GB)',
+                    data: [1024, 1024, 2048, 2048, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 40],
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1,
+                    type: 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current Usage vs. Data Cap',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+        // Client Category Chart
+        const categoryCtx = document.getElementById('clientCategoryChart').getContext('2d');
+        const clientCategoryChart = new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Heavy Users', 'Growing Users', 'Stable Users', 'Light Users'],
+                datasets: [{
+                    data: [3, 3, 6, 1],
+                    backgroundColor: [
+                        'rgba(30, 64, 175, 0.6)',
+                        'rgba(67, 56, 202, 0.6)',
+                        'rgba(6, 95, 70, 0.6)',
+                        'rgba(107, 33, 168, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgb(30, 64, 175)',
+                        'rgb(67, 56, 202)',
+                        'rgb(6, 95, 70)',
+                        'rgb(107, 33, 168)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Client Distribution by Usage Category',
+                        font: { size: 16 }
+                    },
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // Heavy Users Chart
+        const heavyUsersCtx = document.getElementById('heavyUsersChart').getContext('2d');
+        const heavyUsersChart = new Chart(heavyUsersCtx, {
+            type: 'line',
+            data: {
+                labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr (Pred)'],
+                datasets: [{
+                    label: 'Akagera Aviation HP',
+                    data: [null, null, null, 1950, 1930, 2110, 2000],
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }, {
+                    label: 'Old Mutual',
+                    data: [null, null, null, 1750, 1660, 1580, 1660],
+                    borderColor: 'rgb(16, 185, 129)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }, {
+                    label: 'Hotel Talent P',
+                    data: [1420, 1680, 459, 2210, 1430, 1610, 1670],
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Heavy Users - Monthly Trends',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+        // Growing Users Chart
+        const growingUsersCtx = document.getElementById('growingUsersChart').getContext('2d');
+        const growingUsersChart = new Chart(growingUsersCtx, {
+            type: 'line',
+            data: {
+                labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr (Pred)'],
+                datasets: [{
+                    label: 'BK HQ',
+                    data: [null, null, null, null, null, 1512, 3000],
+                    borderColor: 'rgb(217, 119, 6)',
+                    backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }, {
+                    label: 'Prime Insurance',
+                    data: [null, null, null, null, 298, 937, 2000],
+                    borderColor: 'rgb(124, 58, 237)',
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }, {
+                    label: 'Kivu Noir',
+                    data: [null, null, null, null, 258, 471, 550],
+                    borderColor: 'rgb(14, 165, 233)',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Growing Users - Monthly Trends',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+        // Surplus/Deficit Chart
+        const surplusCtx = document.getElementById('surplusDeficitChart').getContext('2d');
+        const surplusDeficitChart = new Chart(surplusCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Akagera Aviation St', 'Akagera Aviation HP', 'Old Mutual', 'BK HQ', 
+                    'Prime Insurance', 'Royal FM', 'Avipro Rwanda', 'Kivu Noir', 
+                    'Kiss FM', 'Jibu', 'Starbucks', 'Question Coffee', 'Hotel Talent P'
+                ],
+                datasets: [{
+                    label: 'Surplus/Deficit (GB)',
+                    data: [
+                        1024-365, 1024-2110, 2048-1580, 2048-1512,
+                        1024-937, 1024-1190, 1024-590, 1024-471,
+                        1024-664, 1024-630, 1024-780, 1024-945, 40-1610
+                    ],
+                    backgroundColor: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        return value < 0 ? 'rgba(239, 68, 68, 0.7)' : 
+                               value < 200 ? 'rgba(245, 158, 11, 0.7)' : 
+                               'rgba(16, 185, 129, 0.7)';
+                    },
+                    borderColor: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        return value < 0 ? 'rgb(239, 68, 68)' : 
+                               value < 200 ? 'rgb(245, 158, 11)' : 
+                               'rgb(16, 185, 129)';
+                    },
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Surplus/Deficit (GB)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'March 2023 - Data Allocation Surplus/Deficit',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
