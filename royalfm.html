@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal FM Internet Data Usage Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        thead {
+            background-color: #f1f5f9;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .status-over {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .status-under {
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .screenshot-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+            .page-break-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Royal FM Internet Data Usage Report</h1>
+        <p class="text-lg text-gray-600">Analysis and Recommendations for Priority Data Cap Adjustment</p>
+        <p class="text-sm text-gray-500 mt-2">Generated on <span id="currentDate"></span></p>
+    </header>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Executive Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-red-50 p-4 rounded-lg">
+                <h3 class="font-bold text-red-800 mb-2">Usage Overview</h3>
+                <p class="text-red-600">Current Priority Cap: 1 TB</p>
+                <p class="text-red-600">Recent Usage: 319 GB (Apr 13–23, 2025)</p>
+                <p class="text-red-600">Previous Cycle: 1.23 TB (Over Cap)</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+                <h3 class="font-bold text-yellow-800 mb-2">Risk Assessment</h3>
+                <p class="text-yellow-600">Priority Data Exhaustion: ~35 days (current rate)</p>
+                <p class="text-yellow-600">Standard Data Risk: Reduced speeds</p>
+                <p class="text-yellow-600">Recommendation: Increase to 1.5 TB</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Usage Details</h2>
+        <div class="overflow-x-auto">
+            <table Balances in the min-w-full">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Usage</th>
+                        <th>Current Cap</th>
+                        <th>Status</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Mar 13–Apr 12, 2025</td>
+                        <td>1.23 TB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td>Increase to 1.5 TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Apr 13–Apr 23, 2025</td>
+                        <td>319 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td>Increase to 1.5 TB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Note: The previous cycle’s 1.23 TB usage exceeded the 1 TB cap, indicating a risk of overage despite the current period’s lower usage.</p>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Trend Analysis</h2>
+        <div class="chart-container">
+            <canvas id="usageTrendChart"></canvas>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Screenshots</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 screenshot-grid">
+            <div>
+                <img src="321.png" alt="Screenshot of Royal FM data usage for Mar 13–Apr 12, 2025">
+                <p class="text-sm text-gray-600 mt-2">Mar 13–Apr 12, 2025 (1.23 TB)</p>
+            </div>
+            <div>
+                <img src="4321.png" alt="Screenshot of Royal FM data usage for Apr 13–Apr 23, 2025">
+                <p class="text-sm text-gray-600 mt-2">Apr 13–Apr 23, 2025 (319 GB)</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Recommendations</h2>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <h3 class="font-bold text-red-700">Action Recommended</h3>
+            <p class="mt-2">Royal FM’s 1 TB priority data cap was exceeded in the Mar 13–Apr 12 cycle with 1.23 TB usage, indicating a risk of overage despite the current period’s lower usage of 319 GB (projected ~870 GB for 30 days). At the current rate of ~29 GB/day, the cap would last ~35 days, but recent overages suggest variability. Starlink’s planned reduction in Standard data speeds could disrupt broadcasting or streaming operations. <strong>An increase to a 1.5 TB priority data cap is recommended</strong> to ensure reliable connectivity and avoid performance degradation.</p>
+        </div>
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+            <h3 class="font-bold text-yellow-700">Standard Data Risks</h3>
+            <p class="mt-2">When priority data is exhausted, Royal FM is bumped to Standard data, which is deprioritized and subject to slower speeds, especially during peak usage times. With Starlink’s upcoming changes, Standard data speeds may drop significantly, potentially impacting critical operations like live streaming or broadcasting. Upgrading to a 1.5 TB priority cap mitigates this risk, ensuring consistent performance.</p>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-500 text-sm mt-10 mb-4">
+        <p>Royal FM Internet Data Usage Report - Conversion rate: 1024 GB = 1 TB</p>
+    </footer>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Usage Trend Chart
+        const usageCtx = document.getElementById('usageTrendChart').getContext('2d');
+        const usageTrendChart = new Chart(usageCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mar 13–Apr 12', 'Apr 13–Apr 23'],
+                datasets: [{
+                    label: 'Usage (GB)',
+                    data: [1230, 319],
+                    backgroundColor: 'rgba(239, 68, 68, 0.5)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1
+                }, {
+                    label: 'Current Priority Cap (GB)',
+                    data: [1024, 1024],
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1,
+                    type: 'line'
+                }, {
+                    label: 'Recommended Priority Cap (GB)',
+                    data: [1536, 1536],
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    borderWidth: 1,
+                    type: 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Royal FM Usage vs. Priority Caps',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
