@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starlink Installation Manager</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTML2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Custom Styles */
+        body { background: #f0f4f8; }
+        .signature-pad { 
+            border: 1px solid #cbd5e0; border-radius: 6px; 
+            background: white; cursor: crosshair; width: 100%; height: 150px;
+        }
+        .rating-star { cursor: pointer; font-size: 24px; color: #e2e8f0; }
+        .rating-star.active { color: #f59e0b; }
+        @media (max-width: 640px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .signature-pad { height: 100px; }
+        }
+        @media print {
+            .no-print { display: none; }
+            .section { border: none; padding: 0; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6">
+    <div class="container max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Starlink Installation Manager</h1>
+
+        <!-- Client ID Input -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700">Client ID:</label>
+            <input type="text" id="clientId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Enter unique client ID" required>
+            <button class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" onclick="loadClientData()">Load Client Data</button>
+        </div>
+
+        <!-- Pre-Installation Section -->
+        <div class="section border border-gray-200 p-6 rounded-lg mb-6">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">📋 Pre-Installation Checklist</h2>
+            <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Contact Information -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Customer Name:</label>
+                    <input type="text" id="customerName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Installation Address:</label>
+                    <textarea id="address" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Site Owner Name (if different):</label>
+                    <input type="text" id="siteOwnerName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Preferred Installation Date/Time:</label>
+                    <input type="datetime-local" id="installDateTime" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <!-- Site Assessment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">GPS Coordinates:</label>
+                    <input type="text" id="gpsCoordinates" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Latitude, Longitude">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Obstruction Details:</label>
+                    <textarea id="obstructionDetails" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Azimuth, elevation, obstructions"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Power Source Proximity:</label>
+                    <input type="text" id="powerProximity" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Distance to nearest outlet">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Environmental Considerations:</label>
+                    <textarea id="environmental" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Wind, snow, wildlife"></textarea>
+                </div>
+                <!-- Equipment Checklist -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Starlink Kit Components:</label>
+                    <div class="space-y-2">
+                        <label><input type="checkbox" id="dish"> Dish</label><br>
+                        <label><input type="checkbox" id="router"> Router</label><br>
+                        <label><input type="checkbox" id="cables"> Cables</label><br>
+                        <label><input type="checkbox" id="mount"> Mount</label>
+                    </div>
+                </div>
+                <!-- Additional Equipment -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Additional Equipment Needed:</label>
+                    <div id="additionalEquipment" class="space-y-2"></div>
+                    <button class="mt-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" onclick="addEquipmentField()">+ Add Item</button>
+                </div>
+                <!-- Mounting & Safety -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Mounting Type:</label>
+                    <select id="mountingType" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        <option>Roof</option>
+                        <option>Pole</option>
+                        <option>Wall</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Safety Gear:</label>
+                    <textarea id="safetyGear" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Harness, helmet, gloves"></textarea>
+                </div>
+                <!-- Permissions & Regulatory -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Permissions Obtained:</label>
+                    <div class="space-y-2">
+                        <label><input type="checkbox" id="landlordApproval"> Landlord Approval</label><br>
+                        <label><input type="checkbox" id="municipalPermit"> Municipal Permit</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Regulatory Compliance:</label>
+                    <textarea id="regulatoryCompliance" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="FCC, local zoning"></textarea>
+                </div>
+                <!-- Documentation -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Site Photos:</label>
+                    <input type="file" id="sitePhotos" multiple accept="image/*" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Risk Assessment:</label>
+                    <textarea id="riskAssessment" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Wildlife, steep slopes"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post-Installation Section -->
+        <div class="section border border-gray-200 p-6 rounded-lg mb-6">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">✅ Post-Installation Report</h2>
+            <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Installation Verification -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Speed Test Results (Mbps):</label>
+                    <input type="number" id="downloadSpeed" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Download">
+                    <input type="number" id="uploadSpeed" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Upload">
+                    <input type="number" id="latency" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Latency (ms)">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Signal Strength:</label>
+                    <input type="text" id="signalStrength" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="From Starlink app">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Router Placement:</label>
+                    <textarea id="routerPlacement" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Location details"></textarea>
+                </div>
+                <!-- Customer Satisfaction -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Customer Satisfaction:</label>
+                    <div class="space-y-2">
+                        <div>Professionalism: <div class="rating" id="professionalismRating"></div></div>
+                        <div>Communication: <div class="rating" id="communicationRating"></div></div>
+  <div>Ease of Setup: <div class="rating" id="setupRating"></div></div>
+                        <div>App Usability: <div class="rating" id="appUsabilityRating"></div></div>
+                        <label><input type="checkbox" id="concernsAddressed"> All Concerns Addressed</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Additional Feedback:</label>
+                    <textarea id="additionalFeedback" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"></textarea>
+                </div>
+                <!-- Documentation -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Installation Photos:</label>
+                    <input type="file" id="installPhotos" multiple accept="image/*" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <!-- Signatures -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Customer Signature:</label>
+                    <canvas class="signature-pad mt-1" id="customerSignature"></canvas>
+                    <button class="mt-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" onclick="clearSignature('customerSignature')">Clear</button>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Installer Signature:</label>
+                    <canvas class="signature-pad mt-1" id="installerSignature"></canvas>
+                    <button class="mt-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" onclick="clearSignature('installerSignature')">Clear</button>
+                </div>
+                <!-- Follow-Up -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Follow-Up Actions:</label>
+                    <textarea id="followUpActions" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Schedule remote diagnostics"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Issues Encountered:</label>
+                    <div id="issuesEncountered" class="space-y-2"></div>
+                    <button class="mt-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700" onclick="addIssueField()">+ Add Issue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-center space-x-4 no-print">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700" onclick="saveClientData()">Save Progress</button>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700" onclick="generatePDF()">Export to PDF</button>
+            <button class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700" onclick="clearForm()">Clear Form</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Signature Pads
+        const signatures = {
+            customerSignature: setupSignaturePad('customerSignature'),
+            installerSignature: setupSignaturePad('installerSignature')
+        };
+
+        function setupSignaturePad(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#2c3e50';
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('touchstart', (e) => startDrawing(e, canvas));
+            canvas.addEventListener('touchmove', (e) => draw(e, canvas));
+            canvas.addEventListener('touchend', stopDrawing);
+
+            function startDrawing(e, canvas) {
+                isDrawing = true;
+                ctx.beginPath();
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                ctx.moveTo(x, y);
+            }
+
+            function draw(e, canvas) {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+            }
+
+            return { canvas, ctx, clear: () => ctx.clearRect(0, 0, canvas.width, canvas.height) };
+        }
+
+        function clearSignature(id) {
+            signatures[id].clear();
+        }
+
+        // Rating System
+        function setupRating(id) {
+            const container = document.getElementById(id);
+            const stars = Array(5).fill().map((_, i) => {
+                const star = document.createElement('span');
+                star.classList.add('rating-star');
+                star.innerHTML = '★';
+                star.addEventListener('click', () => {
+                    container.querySelectorAll('.rating-star').forEach((s, j) => {
+                        s.classList.toggle('active', j <= i);
+                    });
+                    container.dataset.rating = i + 1;
+                });
+                container.appendChild(star);
+                return star;
+            });
+        }
+
+        ['professionalismRating', 'communicationRating', 'setupRating', 'appUsabilityRating'].forEach(setupRating);
+
+        // Dynamic Fields
+        function addEquipmentField() {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'space-x-2');
+            div.innerHTML = `
+                <input type="text" class="block w-full p-2 border border-gray-300 rounded-md equipment-input" placeholder="Item name">
+                <button class="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            document.getElementById('additionalEquipment').appendChild(div);
+        }
+
+        function addIssueField() {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'space-x-2');
+            div.innerHTML = `
+                <input type="text" class="block w-full p-2 border border-gray-300 rounded-md issue-input" placeholder="Issue description">
+                <button class="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            document.getElementById('issuesEncountered').appendChild(div);
+        }
+
+        // Form Data Management
+        function saveClientData() {
+            const clientId = document.getElementById('clientId').value.trim();
+            if (!clientId) {
+                alert('Please enter a Client ID');
+                return;
+            }
+
+            const data = {
+                customerName: document.getElementById('customerName').value,
+                address: document.getElementById('address').value,
+                siteOwnerName: document.getElementById('siteOwnerName').value,
+                installDateTime: document.getElementById('installDateTime').value,
+                gpsCoordinates: document.getElementById('gpsCoordinates').value,
+                obstructionDetails: document.getElementById('obstructionDetails').value,
+                powerProximity: document.getElementById('powerProximity').value,
+                environmental: document.getElementById('environmental').value,
+                dish: document.getElementById('dish').checked,
+                router: document.getElementById('router').checked,
+                cables: document.getElementById('cables').checked,
+                mount: document.getElementById('mount').checked,
+                additionalEquipment: Array.from(document.querySelectorAll('.equipment-input')).map(input => input.value),
+                mountingType: document.getElementById('mountingType').value,
+                safetyGear: document.getElementById('safetyGear').value,
+                landlordApproval: document.getElementById('landlordApproval').checked,
+                municipalPermit: document.getElementById('municipalPermit').checked,
+                regulatoryCompliance: document.getElementById('regulatoryCompliance').value,
+                riskAssessment: document.getElementById('riskAssessment').value,
+                downloadSpeed: document.getElementById('downloadSpeed').value,
+                uploadSpeed: document.getElementById('uploadSpeed').value,
+                latency: document.getElementById('latency').value,
+                signalStrength: document.getElementById('signalStrength').value,
+                routerPlacement: document.getElementById('routerPlacement').value,
+                professionalismRating: document.getElementById('professionalismRating').dataset.rating || 0,
+                communicationRating: document.getElementById('communicationRating').dataset.rating || 0,
+                setupRating: document.getElementById('setupRating').dataset.rating || 0,
+                appUsabilityRating: document.getElementById('appUsabilityRating').dataset.rating || 0,
+                concernsAddressed: document.getElementById('concernsAddressed').checked,
+                additionalFeedback: document.getElementById('additionalFeedback').value,
+                followUpActions: document.getElementById('followUpActions').value,
+                issuesEncountered: Array.from(document.querySelectorAll('.issue-input')).map(input => input.value),
+                customerSignature: signatures.customerSignature.canvas.toDataURL(),
+                installerSignature: signatures.installerSignature.canvas.toDataURL()
+            };
+
+            localStorage.setItem(`starlink_${clientId}`, JSON.stringify(data));
+            alert('Progress saved!');
+        }
+
+        function loadClientData() {
+            const clientId = document.getElementById('clientId').value.trim();
+            const data = JSON.parse(localStorage.getItem(`starlink_${clientId}`));
+            if (!data) {
+                alert('No data found for this Client ID');
+                return;
+            }
+
+            document.getElementById('customerName').value = data.customerName || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('siteOwnerName').value = data.siteOwnerName || '';
+            document.getElementById('installDateTime').value = data.installDateTime || '';
+            document.getElementById('gpsCoordinates').value = data.gpsCoordinates || '';
+            document.getElementById('obstructionDetails').value = data.obstructionDetails || '';
+            document.getElementById('powerProximity').value = data.powerProximity || '';
+            document.getElementById('environmental').value = data.environmental || '';
+            document.getElementById('dish').checked = data.dish || false;
+            document.getElementById('router').checked = data.router || false;
+            document.getElementById('cables').checked = data.cables || false;
+            document.getElementById('mount').checked = data.mount || false;
+            document.getElementById('mountingType').value = data.mountingType || 'Roof';
+            document.getElementById('safetyGear').value = data.safetyGear || '';
+            document.getElementById('landlordApproval').checked = data.landlordApproval || false;
+            document.getElementById('municipalPermit').checked = data.municipalPermit || false;
+            document.getElementById('regulatoryCompliance').value = data.regulatoryCompliance || '';
+            document.getElementById('riskAssessment').value = data.riskAssessment || '';
+            document.getElementById('downloadSpeed').value = data.downloadSpeed || '';
+            document.getElementById('uploadSpeed').value = data.uploadSpeed || '';
+            document.getElementById('latency').value = data.latency || '';
+            document.getElementById('signalStrength').value = data.signalStrength || '';
+            document.getElementById('routerPlacement').value = data.routerPlacement || '';
+            document.getElementById('professionalismRating').dataset.rating = data.professionalismRating || 0;
+            document.getElementById('communicationRating').dataset.rating = data.communicationRating || 0;
+            document.getElementById('setupRating').dataset.rating = data.setupRating || 0;
+            document.getElementById('appUsabilityRating').dataset.rating = data.appUsabilityRating || 0;
+            document.getElementById('concernsAddressed').checked = data.concernsAddressed || false;
+            document.getElementById('additionalFeedback').value = data.additionalFeedback || '';
+            document.getElementById('followUpActions').value = data.followUpActions || '';
+
+            // Load additional equipment
+            document.getElementById('additionalEquipment').innerHTML = '';
+            (data.additionalEquipment || []).forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('flex', 'items-center', 'space-x-2');
+                div.innerHTML = `
+                    <input type="text" class="block w-full p-2 border border-gray-300 rounded-md equipment-input" value="${item}">
+                    <button class="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" onclick="this.parentElement.remove()">Remove</button>
+                `;
+                document.getElementById('additionalEquipment').appendChild(div);
+            });
+
+            // Load issues encountered
+            document.getElementById('issuesEncountered').innerHTML = '';
+            (data.issuesEncountered || []).forEach(issue => {
+                const div = document.createElement('div');
+                div.classList.add('flex', 'items-center', 'space-x-2');
+                div.innerHTML = `
+                    <input type="text" class="block w-full p-2 border border-gray-300 rounded-md issue-input" value="${issue}">
+                    <button class="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700" onclick="this.parentElement.remove()">Remove</button>
+                `;
+                document.getElementById('issuesEncountered').appendChild(div);
+            });
+
+            // Load signatures
+            ['customerSignature', 'installerSignature'].forEach(id => {
+                if (data[id]) {
+                    const img = new Image();
+                    img.src = data[id];
+                    img.onload = () => {
+                        signatures[id].clear();
+                        signatures[id].ctx.drawImage(img, 0, 0);
+                    };
+                }
+            });
+
+            // Update ratings
+            ['professionalismRating', 'communicationRating', 'setupRating', 'appUsabilityRating'].forEach(id => {
+                const rating = parseInt(data[id]) || 0;
+                const container = document.getElementById(id);
+                container.querySelectorAll('.rating-star').forEach((star, i) => {
+                    star.classList.toggle('active', i < rating);
+                });
+            });
+        }
+
+        function clearForm() {
+            document.querySelectorAll('input, textarea').forEach(field => {
+                if (field.type !== 'button') field.value = '';
+                if (field.type === 'checkbox') field.checked = false;
+            });
+            document.querySelectorAll('.rating').forEach(container => {
+                container.querySelectorAll('.rating-star').forEach(star => star.classList.remove('active'));
+                container.dataset.rating = 0;
+            });
+            document.getElementById('additionalEquipment').innerHTML = '';
+            document.getElementById('issuesEncountered').innerHTML = '';
+            Object.values(signatures).forEach(sig => sig.clear());
+        }
+
+        // PDF Generation
+        function generatePDF() {
+            const clientId = document.getElementById('clientId').value.trim();
+            if (!clientId || !document.getElementById('customerName').value || !document.getElementById('address').value) {
+                alert('Please fill in Client ID, Customer Name, and Address');
+                return;
+            }
+
+            const element = document.querySelector('.container');
+            html2pdf()
+                .set({
+                    margin: [10, 10],
+                    filename: `starlink-installation-report_${clientId}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, width: 794, height: 1123 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                })
+                .from(element)
+                .save();
+        }
+    </script>
+</body>
+</html>
