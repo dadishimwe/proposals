@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rua/Kivu Noir Internet Data Usage Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        thead {
+            background-color: #f1f5f9;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .status-over {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .status-under {
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .screenshot-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+            .page-break-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Rua/Kivu Noir Internet Data Usage Report</h1>
+        <p class="text-lg text-gray-600">Analysis and Recommendations for Priority Data Cap Adjustment</p>
+        <p class="text-sm text-gray-500 mt-2">Generated on <span id="currentDate"></span></p>
+    </header>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Executive Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-red-50 p-4 rounded-lg">
+                <h3 class="font-bold text-red-800 mb-2">Usage Overview</h3>
+                <p class="text-red-600">Current Priority Cap: 1 TB</p>
+                <p class="text-red-600">Recent Usage: 824 GB (Apr 12–26, 2025)</p>
+                <p class="text-red-600">Projected Usage: ~1.9 TB (Apr 12–May 11)</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+                <h3 class="font-bold text-yellow-800 mb-2">Risk Assessment</h3>
+                <p class="text-yellow-600">Priority Data Exhaustion: ~19 days monthly</p>
+                <p class="text-yellow-600">Standard Data Risk: Reduced speeds</p>
+                <p class="text-yellow-600">Recommendation: Increase to 2 TB</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Usage Details</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Usage</th>
+                        <th>Current Cap</th>
+                        <th>Status</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Mar 13–Apr 12, 2025</td>
+                        <td>580 GB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-under">Under Cap</span></td>
+                        <td>Increase to 2 TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Apr 12–Apr 26, 2025 (Projected)</td>
+                        <td>1.9 TB</td>
+                        <td>1 TB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td>Increase to 2 TB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Note: A network extension increased the number of users, driving usage from 580 GB to a projected ~1.9 TB, exceeding the 1 TB cap.</p>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Trend Analysis</h2>
+        <div class="chart-container">
+            <canvas id="usageTrendChart"></canvas>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Screenshots</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 screenshot-grid">
+            <div>
+                <img src="rua1.png" alt="Screenshot of Rua/Kivu Noir data usage for Mar 13–Apr 12, 2025">
+                <p class="text-sm text-gray-600 mt-2">Mar 13–Apr 12, 2025 (580 GB)</p>
+            </div>
+            <div>
+                <img src="rua2.png" alt="Screenshot of Rua/Kivu Noir data usage for Apr 12–Apr 26, 2025">
+                <p class="text-sm text-gray-600 mt-2">Apr 12–Apr 26, 2025 (824 GB)</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Recommendations</h2>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <h3 class="font-bold text-red-700">Urgent Action Recommended</h3>
+            <p class="mt-2">Rua/Kivu Noir’s 1 TB priority data cap is insufficient following a network extension that increased the number of users, driving usage from 580 GB (Mar 13–Apr 12) to a projected ~1.9 TB (Apr 12–May 11). At the current rate of ~55 GB/day, the cap is exhausted in ~19 days of a 30-day cycle, forcing reliance on Standard data for ~11–12 days. Starlink’s planned reduction in Standard data speeds could disrupt operations for the expanded user base. <strong>An immediate increase to a 2 TB priority data cap is recommended</strong> to ensure reliable connectivity. Consider Peplink solutions to optimize bandwidth for high-demand scenarios, as seen in similar deployments.</p>
+        </div>
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+            <h3 class="font-bold text-yellow-700">Standard Data Risks</h3>
+            <p class="mt-2">When priority data is exhausted, Rua/Kivu Noir is bumped to Standard data, which is deprioritized and subject to slower speeds, especially during peak usage times. With Starlink’s upcoming changes, Standard data speeds may drop significantly, impacting the increased user base from the network extension. Upgrading to a 2 TB priority cap mitigates this risk, ensuring consistent performance for all users.</p>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-500 text-sm mt-10 mb-4">
+        <p>Rua/Kivu Noir Internet Data Usage Report - Conversion rate: 1024 GB = 1 TB</p>
+    </footer>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Usage Trend Chart
+        const usageCtx = document.getElementById('usageTrendChart').getContext('2d');
+        const usageTrendChart = new Chart(usageCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mar 13–Apr 12', 'Apr 12–May 11 (Projected)'],
+                datasets: [{
+                    label: 'Usage (GB)',
+                    data: [580, 1900],
+                    backgroundColor: 'rgba(239, 68, 68, 0.5)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1
+                }, {
+                    label: 'Current Priority Cap (GB)',
+                    data: [1024, 1024],
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1,
+                    type: 'line'
+                }, {
+                    label: 'Recommended Priority Cap (GB)',
+                    data: [2048, 2048],
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    borderWidth: 1,
+                    type: 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Rua/Kivu Noir Usage vs. Priority Caps',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
