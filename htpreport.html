@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Talent P Internet Data Usage Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20 düşünüyorumpx;
+            background-color: #f8fafc;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        thead {
+            background-color: #f1f5f9;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .status-over {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .screenshot-grid img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #e2e8f0;
+            }
+            .page-break-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Hotel Talent P Internet Data Usage Report</h1>
+        <p class="text-lg text-gray-600">Analysis and Recommendations for Priority Data Cap Adjustment</p>
+        <p class="text-sm text-gray-500 mt-2">Generated on <span id="currentDate"></span></p>
+    </header>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Executive Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-red-50 p-4 rounded-lg">
+                <h3 class="font-bold text-red-800 mb-2">Usage Overview</h3>
+                <p class="text-red-600">Current Priority Cap: 40 GB</p>
+                <p class="text-red-600">Current Cycle: 2.43 TB (Apr 13–May 7)</p>
+                <p class="text-red-600">Projected Usage: ~2.92 TB (Apr 13–May 12)</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+                <h3 class="font-bold text-yellow-800 mb-2">Risk Assessment</h3>
+                <p class="text-yellow-600">Priority Data Exhaustion: ~10 hours monthly</p>
+                <p class="text-yellow-600">Standard Data Risk: Reduced speeds</p>
+                <p class="text-yellow-600">Recommendation: Increase to 2.5 TB</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Data Usage Details</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Usage</th>
+                        <th>Current Cap</th>
+                        <th>Status</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Mar 13–Apr 12, 2025</td>
+                        <td>1.89 TB</td>
+                        <td>40 GB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td>Increase to 2.5 TB</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Apr 13–May 7, 2025 (Projected Full Cycle)</td>
+                        <td>2.92 TB</td>
+                        <td>40 GB</td>
+                        <td><span class="status-over">Over Cap</span></td>
+                        <td>Increase to 2.5 TB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Note: Usage significantly exceeds the 40 GB priority cap, exhausting it within ~10 hours of each billing cycle.</p>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Trend Analysis</h2>
+        <div class="chart-container">
+            <canvas id="usageTrendChart"></canvas>
+        </div>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Screenshots</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 screenshot-grid">
+            <div>
+                <img src="mar13-apr12-screenshot.png" alt="Screenshot of Hotel Talent P data usage for Mar 13–Apr 12, 2025">
+                <p class="text-sm text-gray-600 mt-2">Mar 13–Apr 12, 2025 (1.89 TB)</p>
+            </div>
+            <div>
+                <img src="apr13-may7-screenshot.png" alt="Screenshot of Hotel Talent P data usage for Apr 13–May 7, 2025">
+                <p class="text-sm text-gray-600 mt-2">Apr 13–May 7, 2025 (2.43 TB)</p>
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Note: Replace placeholder images with actual screenshots for each period.</p>
+    </section>
+
+    <section class="card page-break-avoid">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Recommendations</h2>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <h3 class="font-bold text-red-700">Urgent Action Required</h3>
+            <p class="mt-2">Hotel Talent P’s 40 GB priority data cap is exhausted within ~10 hours of each billing cycle, with usage reaching 2.43 TB (Apr 13–May 7) and a projected ~2.92 TB for the full cycle (Apr 13–May 12). At the current rate of ~100 GB/day, reliance on Standard data is nearly constant, risking performance degradation with Starlink’s planned speed reductions. <strong>An immediate increase to a 2.5 TB priority data cap is recommended</strong> to ensure uninterrupted service. Peplink solutions may help optimize high-bandwidth operations.</p>
+        </div>
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+            <h3 class="font-bold text-yellow-700">Standard Data Risks</h3>
+            <p class="mt-2">When priority data is exhausted, Hotel Talent P is bumped to Standard data, which is deprioritized and subject to slower speeds, especially during peak usage times. With Starlink’s upcoming changes, Standard data speeds may drop significantly, impacting critical operations. Upgrading to a 2.5 TB priority cap mitigates this risk.</p>
+        </div>
+    </section>
+
+    <footer class="text-center text-gray-500 text-sm mt-10 mb-4">
+        <p>Hotel Talent P Internet Data Usage Report - Conversion rate: 1024 GB = 1 TB</p>
+    </footer>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Usage Trend Chart
+        const usageCtx = document.getElementById('usageTrendChart').getContext('2d');
+        const usageTrendChart = new Chart(usageCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mar 13–Apr 12', 'Apr 13–May 12 (Projected)'],
+                datasets: [{
+                    label: 'Usage (GB)',
+                    data: [1890, 2991],
+                    backgroundColor: 'rgba(239, 68, 68, 0.5)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1
+                }, {
+                    label: 'Current Priority Cap (GB)',
+                    data: [40, 40],
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1,
+                    type: 'line'
+                }, {
+                    label: 'Recommended Priority Cap (GB)',
+                    data: [2560, 2560],
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    borderWidth: 1,
+                    type: 'line'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Hotel Talent P Usage vs. Priority Caps',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
