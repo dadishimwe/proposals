@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .quotation-info {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .goals-section {
+      background: #1a2942;
+      color: white;
+      padding: 2rem;
+    }
+
+    .options-section {
+      padding: 2rem;
+      background: #fff;
+    }
+
+    .option-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .option-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .option-card h3 {
+      color: #1a2942;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #ff6b00;
+    }
+
+    .option-card ul {
+      list-style: none;
+    }
+
+    .option-card li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .option-card li:before {
+      content: "•";
+      color: #ff6b00;
+      position: absolute;
+      left: 0;
+    }
+
+    .solution-section {
+      background: #f8f9fa;
+      padding: 2rem;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .solution-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .solution-item h4 {
+      color: #ff6b00;
+      margin-bottom: 0.5rem;
+    }
+
+    .package-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .package-table th {
+      background: #ff6b00;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .package-table th:last-child,
+    .package-table td:last-child {
+      text-align: right;
+    }
+
+    .package-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    .input-qty {
+      width: 80px;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .notice-section {
+      background: #1a2942;
+      color: white;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .notes-section {
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+
+    .note {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .total-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: #1a2942;
+      color: white;
+    }
+
+    .total-section h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .total-section p {
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      color: #1a2942;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #ff6b00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="zuba.png" alt="ZUBA" class="logo" style="width: 25%; height: auto">
+    </header>
+
+    <div class="quotation-info">
+      <div>
+        <p>ZUBA BROADBAND LTD</p>
+        <p>22 KG 548 STREET</p>
+        <p>KACYIRU, KIGALI</p>
+        <p>0790 099 777</p>
+      </div>  
+      <div>
+        <h3>Addressed To:</h3>
+        <p><b>Company Name:</b> Kigali International Community School</p>
+        <p><b>Company Address:</b> KT9824 2, Kigali</p>
+        <p><b>Attn:</b> Fulgence Habumugisha</p>
+        <p><b>Email:</b> fhabumugisha@kicsrw.org</p>
+      </div>
+      <div>
+        <p><b>No.:</b> RW-GAS-EDU-ES-KICS-210525.1</p>
+        <p><b>Date:</b> 04/03/2025</p>
+        <p><b>Validity:</b> 30 Days</p>
+        <p><b>Contact Person:</b> Fred Rwigamba</p>
+        <p><b>Mobile Number:</b> +250 788 306 741</p>
+      </div>
+    </div>
+
+    <div class="goals-section">
+      <p><b style="display: flex; justify-content: center; align-items: center;">ZUBA BROADBAND - STARLINK ENTERPRISE RESELLER - QUOTATION</b></p>
+    </div>
+
+    <div class="options-section">
+      <h2 class="section-title">Equipment and Services</h2>
+      <div class="option-cards">
+        <div class="option-card">
+          <p><strong>Standard Performance: fast speeds and greater reliability</strong></p><br>
+          <p>Flexible pricing options available with or without hardware purchase. See pricing details below.</p>
+          <ul>
+            <li>All installation, including mounts and cabling.</li>
+            <li>Site visits to confirm ideal installation method for best performance.</li>
+            <li>IT staff training for basic troubleshooting and maintenance.</li>
+            <li>Monthly data usage and performance reports and system health checks.</li>
+            <li>Public IP 24/7 service and maintenance, including replacement of problematic hardware at no cost, for the duration of the contract.</li>
+            <li>Flexibility to change monthly plans on a per-site basis.</li>
+            <li>1TB priority data per month.</li>
+          </ul>
+        </div>
+        <div class="option-card">
+          <p><strong>Enterprise Performance: faster speeds and reliability</strong></p><br>
+          <p>Flexible pricing options available with or without hardware purchase. See pricing details below.</p>
+          <ul>
+            <li>All installation, including mounts and cabling.</li>
+            <li>Site visits to confirm ideal installation method for best performance.</li>
+            <li>Unlimited monthly data at download speeds of up to 220 Mbps with 6TB Priority Data.</li>
+            <li>IT staff training for basic troubleshooting and maintenance.</li>
+            <li>Monthly data usage and performance reports and system health checks.</li>
+            <li>Public IP 24/7 service and maintenance, including replacement of problematic hardware at no cost, for the duration of the contract.</li>
+            <li>Flexibility to change monthly plans on a per-site basis.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="solution-section">
+      <h2 class="section-title">Our Solution</h2>
+      <div class="solution-grid">
+        <div class="solution-item">
+          <h4>Reliability</h4>
+          <p>Fast and consistent internet connectivity to meet your business needs.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Flexibility</h4>
+          <p>Choose the plan that best fits your requirements, with the ability to adjust as needed.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Support</h4>
+          <p>24/7 customer service and maintenance to ensure uninterrupted service.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Coverage</h4>
+          <p>Service available nationwide, even in remote areas.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Standard Performance - Price per month</h2>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Unit Price (RWF)</th>
+          <th>Quantity</th>
+          <th>Total (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>KICS</td>
+          <td>Standard - 1TB Package (Without Kit Purchase)</td>
+          <td>453,000 Rwf</td>
+          <td>1</td>
+          <td class="rowTotal">453,000 Rwf</td>
+        </tr>
+        <tr>
+          <td>KICS</td>
+          <td>Standard - 1TB Package (With Kit Purchase)</td>
+          <td>357,000 Rwf</td>
+          <td>1</td>
+          <td class="rowTotal">357,000 Rwf</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Enterprise Performance - Price per month</h2>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Unit Price (RWF)</th>
+          <th>Quantity</th>
+          <th>Total (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>KICS</td>
+          <td>Enterprise - 6TB Package (Without Kit Purchase)</td>
+          <td>1,600,000 Rwf</td>
+          <td>1</td>
+          <td class="rowTotal">1,600,000 Rwf</td>
+        </tr>
+        <tr>
+          <td>KICS</td>
+          <td>Enterprise - 6TB Package (With Kit Purchase)</td>
+          <td>1,400,000 Rwf</td>
+          <td>1</td>
+          <td class="rowTotal">1,400,000 Rwf</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notice-section">
+      <table>
+    <th><p><b>Note:</b> For the 'With Kit Purchase' options, there is a one-time kit purchase cost:<br></p>
+    - Standard Kit: 1,300,000 Rwf<br>
+    - Enterprise Kit: 2,200,000 Rwf<br>
+    Choosing to purchase the kit reduces the monthly service price as shown above.</p>
+    </table>
+    </div>
+
+    <div class="notes-section">
+      <h2 class="section-title">Important Notes</h2>
+      <div class="note-item"><b>Note 1:</b> With this package, KICS can provide optimal internet standards for its customers, operators, and handle all other high-bandwidth tasks.</div>
+      <div class="note-item"><b>Note 2:</b> Additional charges may apply for complex installations or special requirements.</div>
+      <div class="note-item"><b>Note 3:</b> Quote based on minimum 36-month contract.</div>
+      <div class="note-item"><b>Note 4:</b> Customer must ensure stable electrical power using a stabilizer/UPS.</div>
+      <div class="note-item"><b>Note 5:</b> Order confirmation requires signed agreement and advance payment.</div>
+      <div class="note-item"><b>Note 6:</b> Additional data usage charged at 350 Rwf per GB.</div>
+      <div class="note-item"><b>Note 7:</b> Customers have the option to purchase the hardware kit for a one-time fee, which reduces the monthly service price. See pricing tables for details.</div>
+    </div>
+
+    <div class="total-section">
+    </div>
+
+    <script>
+      document.querySelectorAll('.input-qty').forEach(input => {
+        input.addEventListener('input', updateTotals);
+      });
+
+      function updateTotals() {
+        document.querySelectorAll('.package-table').forEach(table => {
+          let tableTotal = 0;
+          table.querySelectorAll('.input-qty').forEach(input => {
+            const price = parseFloat(input.dataset.price);
+            const quantity = parseInt(input.value) || 0;
+            const rowTotal = price * quantity;
+            input.closest('tr').querySelector('.rowTotal').textContent = 
+              rowTotal.toLocaleString() + ' Rwf';
+            tableTotal += rowTotal;
+          });
+        });
+      }
+    </script>
+  </div>
+</body>
+</html>
