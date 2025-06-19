@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .quotation-info {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .goals-section {
+      background: #1a2942;
+      color: white;
+      padding: 2rem;
+    }
+
+    .options-section {
+      padding: 2rem;
+      background: #fff;
+    }
+
+    .option-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .option-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .option-card h3 {
+      color: #1a2942;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #ff6b00;
+    }
+
+    .option-card ul {
+      list-style: none;
+    }
+
+    .option-card li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .option-card li:before {
+      content: "•";
+      color: #ff6b00;
+      position: absolute;
+      left: 0;
+    }
+
+    .solution-section {
+      background: #f8f9fa;
+      padding: 2rem;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .solution-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .solution-item h4 {
+      color: #ff6b00;
+      margin-bottom: 0.5rem;
+    }
+
+    .package-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .package-table th {
+      background: #ff6b00;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .package-table th:last-child,
+    .package-table td:last-child {
+      text-align: right;
+    }
+
+    .package-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    .input-qty {
+      width: 80px;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .notice-section {
+      background: #1a2942;
+      color: white;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .notes-section {
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+
+    .note {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .total-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: #1a2942;
+      color: white;
+    }
+
+    .total-section h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .total-section p {
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      color: #1a2942;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #ff6b00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="zuba.png" alt="ZUBA" class="logo" style="width: 25%; height: auto">
+      <img src="volkswagen.png" class="logo" style="width: 20%; height: auto">
+    </header>
+
+    <div class="quotation-info">
+        <div>
+            <p>         ZUBA BROADBAND LTD</p>
+            <p>         22 KG 548 STREET</p>
+            <p>         KACYIRU, KIGALI</p>
+            <p>         0790 099 777</p>
+            </div>  
+      <div>
+        <h3>Addressed To:</h3>
+        <p><b>Attn:</b> Jean Luc Mugabo</p>
+        <p><b>Company Name:</b> Volkswagen Mobility Solutions</p>
+        <p><b>Company Address:</b> Kigali Special Economic Zone</p>
+      </div>
+      <div>
+        <p><b>No.:</b> RW-GAS-IND-HE-VMR-131124.1</p>
+        <p><b>Date:</b> 11/13/2024</p>
+        <p><b>Currency:</b> USD Payable in RWF</p>
+        <p><b>Validity:</b> 30 Days</p>
+        <p><b>Sales Manager:</b> Robert Fogler</p>
+        <p><b>Mobile Number:</b> +1 303 888 8877/ +250791701472</p>
+      </div>
+    </div>
+
+    <div class="goals-section">
+        <p><b>ZUBA BROADBAND ENTERPRISE NETWORKING SOLUTION QUOTATION</b></p>
+    </div>
+
+    <div class="solution-section">
+      <h2 class="section-title">Our Solution</h2>
+      <div class="solution-grid">
+        <div class="solution-item">
+          <h4>Comprehensive Coverage</h4>
+          <p>Complete networking solution with redundant Starlink connectivity, professional routing, and enterprise-grade wireless access points.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Redundant Connectivity</h4>
+          <p>Bonded Starlink setup provides failover protection and increased bandwidth for critical operations.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Scalable Infrastructure</h4>
+          <p>Professional-grade switches and access points designed to handle current and future networking demands.</p>
+        </div>
+        <div class="solution-item">
+          <h4>Professional Installation</h4>
+          <p>Complete installation, configuration, and testing of all networking equipment with ongoing support.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Starlink Kits & Networking Equipment</h2>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th>Unit Price (USD)</th>
+          <th>Quantity</th>
+          <th>Total (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Standard Starlink Kit #1</td>
+          <td>Starlink dish with 1TB monthly data (bonded pair #1)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Standard Starlink Kit #2</td>
+          <td>Starlink dish with 1TB monthly data (bonded pair #2)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Standard Starlink Kit #3</td>
+          <td>Starlink dish with 1TB monthly data (individual)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Standard Starlink Kit #4</td>
+          <td>Starlink dish with 1TB monthly data (individual)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Standard Starlink Kit #5</td>
+          <td>Starlink dish with 1TB monthly data (individual)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Standard Starlink Kit #6</td>
+          <td>Starlink dish with 1TB monthly data (individual)</td>
+          <td>$599.00</td>
+          <td>1</td>
+          <td class="rowTotal">$599.00</td>
+        </tr>
+        <tr>
+          <td>Peplink B One Plus Router</td>
+          <td>Multi-WAN router with load balancing and failover</td>
+          <td>$399.00</td>
+          <td>4</td>
+          <td class="rowTotal">$1,596.00</td>
+        </tr>
+        <tr>
+          <td>24-Port Managed Switch</td>
+          <td>Enterprise-grade 24-port Gigabit managed switch</td>
+          <td>$449.00</td>
+          <td>1</td>
+          <td class="rowTotal">$449.00</td>
+        </tr>
+        <tr>
+          <td>8-Port Managed Switch</td>
+          <td>Enterprise-grade 8-port Gigabit managed switch</td>
+          <td>$189.00</td>
+          <td>2</td>
+          <td class="rowTotal">$378.00</td>
+        </tr>
+        <tr>
+          <td>Peplink Access Point</td>
+          <td>High-performance enterprise wireless access point</td>
+          <td>$299.00</td>
+          <td>2</td>
+          <td class="rowTotal">$598.00</td>
+        </tr>
+        <tr>
+          <td>UniFi 6 AP Pro</td>
+          <td>Wi-Fi 6 professional access point</td>
+          <td>$179.00</td>
+          <td>17</td>
+          <td class="rowTotal">$3,043.00</td>
+        </tr>
+        <tr>
+          <td>Cat6 RJ45 Cables</td>
+          <td>Professional-grade Ethernet cables (various lengths)</td>
+          <td>$870.00</td>
+          <td>1</td>
+          <td class="rowTotal">$870.00</td>
+        </tr>
+        <tr>
+          <td>Installation & Configuration</td>
+          <td>Professional installation and system configuration</td>
+          <td>$1,200.00</td>
+          <td>1</td>
+          <td class="rowTotal">$1,200.00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Total</h2>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Subtotal (USD)</th>
+          <th>Tax (18%)</th>
+          <th>Grand Total (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Complete Networking Solution</td>
+          <td>$11,529.00</td>
+          <td>$2,075.22</td>
+          <td class="rowTotal">$13,604.22</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="notice-section">
+      <h3>NOTICE!</h3>
+      <p>Prices are quoted in USD but will be billed in RwF according to the then-prevailing exchange rate.</p>
+    </div>
+
+    <div class="notes-section">
+      <h2 class="section-title">Important Notes</h2>
+      <div class="note"><b>Note 1:</b> This pricing includes all necessary equipment for a complete enterprise networking solution with redundant internet connectivity.</div>
+      <div class="note"><b>Note 2:</b> Installation includes professional mounting, cable management, and complete system configuration.</div>
+      <div class="note"><b>Note 3:</b> All equipment comes with manufacturer warranties and ongoing technical support.</div>
+      <div class="note"><b>Note 4:</b> Monthly Starlink service fees are separate and billed directly by Starlink.</div>
+      <div class="note"><b>Note 5:</b> Customer must ensure stable electrical power using UPS/stabilizer systems for all equipment.</div>
+      <div class="note"><b>Note 6:</b> Order confirmation requires signed agreement and 50% advance payment.</div>
+      <div class="note"><b>Note 7:</b> Prices are in USD, payable in RWF at current exchange rates, exclusive of applicable taxes.</div>
+      <div class="note"><b>Note 8:</b> Final installation may require additional cabling or hardware based on site survey.</div>
+    </div>
+
+    <script>
+      // No dynamic calculations needed - all totals are static
+    </script>
+  </div>
+</body>
+</html>
