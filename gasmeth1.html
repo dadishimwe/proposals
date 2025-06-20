@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      height: 50px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff6b00;
+    }
+
+    .quotation-info {
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .goals-section {
+      background: #1a2942;
+      color: white;
+      padding: 2rem;
+    }
+
+    .options-section {
+      padding: 2rem;
+      background: #fff;
+    }
+
+    .option-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .option-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .option-card h3 {
+      color: #1a2942;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #ff6b00;
+    }
+
+    .option-card ul {
+      list-style: none;
+    }
+
+    .option-card li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .option-card li:before {
+      content: "•";
+      color: #ff6b00;
+      position: absolute;
+      left: 0;
+    }
+
+    .solution-section {
+      background: #f8f9fa;
+      padding: 2rem;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .solution-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .solution-item h4 {
+      color: #ff6b00;
+      margin-bottom: 0.5rem;
+    }
+
+    .package-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    .package-table th {
+      background: #ff6b00;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .package-table th:last-child,
+    .package-table td:last-child {
+      text-align: right;
+    }
+
+    .package-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    .package-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .package-table .total-row {
+      background: #1a2942 !important;
+      color: white;
+      font-weight: bold;
+    }
+
+    .package-table .grand-total-row {
+      background: #ff6b00 !important;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .notice-section {
+      background: #1a2942;
+      color: white;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .notes-section {
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+
+    .notes-list {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .notes-list ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .notes-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .notes-list li:before {
+      content: "•";
+      color: #ff6b00;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .total-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      background: #1a2942;
+      color: white;
+    }
+
+    .total-section h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .total-section p {
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      color: #1a2942;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #ff6b00;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    .summary-table th {
+      background: #1a2942;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .summary-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+    }
+
+    .summary-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .summary-tables {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .priority-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .priority-table th {
+      background: #1a2942;
+      color: white;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .priority-table td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      text-align: right;
+    }
+
+    .priority-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">ZUBA BROADBAND</div>
+    </header>
+
+    <div class="quotation-info">
+      <div>
+        <p><strong>ZUBA BROADBAND LTD</strong></p>
+        <p>22 KG 548 STREET</p>
+        <p>KACYIRU, KIGALI</p>
+        <p>0790 099 777</p>
+      </div>  
+      <div>
+        <h3>Addressed To:</h3>
+        <p><b>Project:</b> GasMeth Project, Rwanda</p>
+        <p><b>Sites:</b> 4 Locations</p>
+        <p><b>Users:</b> Approximately 60</p>
+        <p><b>Service:</b> Starlink & Peplink Deployment</p>
+      </div>
+      <div>
+        <p><b>Proposal No.:</b> RW-GAS-STAR-180625</p>
+        <p><b>Date:</b> 18/06/2025</p>
+        <p><b>Validity:</b> 30 Days</p>
+        <p><b>Contact Person:</b> Fred Rwigamba</p>
+        <p><b>Mobile Number:</b> +250 788 306 741</p>
+      </div>
+    </div>
+
+    <div class="goals-section">
+      <p style="display: flex; justify-content: center; align-items: center;"><b>STARLINK AND PEPLINK INTERNET DEPLOYMENT PROPOSAL</b></p>
+    </div>
+
+    <div class="options-section">
+      <h2 class="section-title">Starlink Standard Kit (Gen 2) - Equipment and Services</h2>
+      <div class="option-card">
+        <p><strong>Standard Kit provides reliable high-speed internet connectivity</strong></p><br>
+        <ul>
+          <li>Download speeds of 50–200 Mbps with low latency (20–40 ms)</li>
+          <li>Includes Wi-Fi 6 router and mounting tripod</li>
+          <li>All-weather satellite dish with advanced phased array technology</li>
+          <li>Suitable for residential and small business use</li>
+          <li>Quick and easy installation with mobile app guidance</li>
+          <li>Built-in diagnostics and performance monitoring</li>
+          <li>24/7 connectivity with global satellite coverage</li>
+          <li>Ethernet adapter included for direct router connection</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="section-title">Equipment Summary & Priority Data Packages</h2>
+    <div class="summary-tables">
+      <div>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Type of Equipment</th>
+              <th>Quantity</th>
+              <th>Price (RWF)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Starlink Standard Kit (Gen 2)</td>
+              <td>6</td>
+              <td>1,500,000</td>
+            </tr>
+            <tr>
+              <td>Peplink B1 Plus Router</td>
+              <td>4</td>
+              <td>800,000</td>
+            </tr>
+            <tr>
+              <td>Switches (1x 24-port, 2x 8-port)</td>
+              <td>3</td>
+              <td>450,000</td>
+            </tr>
+            <tr>
+              <td>Peplink Access Points</td>
+              <td>2</td>
+              <td>300,000</td>
+            </tr>
+            <tr>
+              <td>Unifi Access Points</td>
+              <td>17</td>
+              <td>2,550,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>Priority Data Package</th>
+              <th>Price (RWF)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 TB Priority</td>
+              <td>650,000</td>
+            </tr>
+            <tr>
+              <td>2 TB Priority</td>
+              <td>832,512</td>
+            </tr>
+            <tr>
+              <td>3 TB Priority</td>
+              <td>1,100,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">Site-Specific Equipment Requirements</h2>
+    
+    <h3 style="color: #1a2942; margin: 1rem 0;">Site 1: Interim Office & Container Office</h3>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Equipment/Service</th>
+          <th>Quantity</th>
+          <th>Price (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Interim Office</td>
+          <td>Bonded Standard Starlink Kits</td>
+          <td>2</td>
+          <td>500,000</td>
+        </tr>
+        <tr>
+          <td>Interim Office</td>
+          <td>Peplink B One Plus Router</td>
+          <td>1</td>
+          <td>200,000</td>
+        </tr>
+        <tr>
+          <td>Interim Office</td>
+          <td>24-Port Switch</td>
+          <td>1</td>
+          <td>150,000</td>
+        </tr>
+        <tr>
+          <td>Interim Office</td>
+          <td>Unifi Access Points</td>
+          <td>6</td>
+          <td>900,000</td>
+        </tr>
+        <tr>
+          <td>Container Office</td>
+          <td>Network Extension</td>
+          <td>1</td>
+          <td>100,000</td>
+        </tr>
+        <tr>
+          <td>Container Office</td>
+          <td>Unifi Access Point</td>
+          <td>1</td>
+          <td>150,000</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3"><strong>Site 1 Total</strong></td>
+          <td><strong>2,000,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="color: #1a2942; margin: 1rem 0;">Site 2: Staff Hostels (Two Buildings)</h3>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Equipment/Service</th>
+          <th>Quantity</th>
+          <th>Price (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Staff Hostels</td>
+          <td>Starlink Standard Kit (Gen 2)</td>
+          <td>1</td>
+          <td>250,000</td>
+        </tr>
+        <tr>
+          <td>Staff Hostels</td>
+          <td>Peplink B One Plus Router</td>
+          <td>1</td>
+          <td>200,000</td>
+        </tr>
+        <tr>
+          <td>Staff Hostels</td>
+          <td>8-Port Switches</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr>
+          <td>Building 1</td>
+          <td>Access Points</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr>
+          <td>Building 2</td>
+          <td>Access Points</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr>
+          <td>Building 2 - Left Wing</td>
+          <td>Access Points</td>
+          <td>3</td>
+          <td>450,000</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3"><strong>Site 2 Total</strong></td>
+          <td><strong>1,800,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="color: #1a2942; margin: 1rem 0;">Site 3: Lakeside House</h3>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Equipment/Service</th>
+          <th>Quantity</th>
+          <th>Price (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lakeside Houses</td>
+          <td>Starlink Standard Kits (Gen 2)</td>
+          <td>2</td>
+          <td>500,000</td>
+        </tr>
+        <tr>
+          <td>Lakeside Houses</td>
+          <td>Compact Routers</td>
+          <td>2</td>
+          <td>400,000</td>
+        </tr>
+        <tr>
+          <td>Larger House</td>
+          <td>Unifi Access Points</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr>
+          <td>2 Smaller Houses</td>
+          <td>Unifi Access Points</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr>
+          <td>Future Extension</td>
+          <td>Network Cabling</td>
+          <td>1</td>
+          <td>150,000</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3"><strong>Site 3 Total</strong></td>
+          <td><strong>1,650,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="color: #1a2942; margin: 1rem 0;">Site 4: Construction Manager's House</h3>
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Equipment/Service</th>
+          <th>Quantity</th>
+          <th>Price (RWF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Manager's House</td>
+          <td>Starlink Standard Kit (Gen 2)</td>
+          <td>1</td>
+          <td>250,000</td>
+        </tr>
+        <tr>
+          <td>Manager's House</td>
+          <td>Peplink B One Plus Router</td>
+          <td>1</td>
+          <td>200,000</td>
+        </tr>
+        <tr>
+          <td>Manager's House</td>
+          <td>Unifi Access Points</td>
+          <td>2</td>
+          <td>300,000</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3"><strong>Site 4 Total</strong></td>
+          <td><strong>750,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="package-table">
+      <thead>
+        <tr>
+          <th colspan="4" style="background: #ff6b00; color: white; text-align: center; font-size: 1.2rem;">PROJECT TOTALS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="grand-total-row">
+          <td colspan="3"><strong>GRAND TOTAL (All Sites)</strong></td>
+          <td><strong>6,200,000 RWF</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="notice-section">
+      <h3>IMPLEMENTATION BENEFITS</h3>
+      <p>• High-Speed Connectivity: 50–300 Mbps enabling real-time collaboration • Reliability: SpeedFusion and failover ensure uninterrupted connectivity • Scalability: Network extensions support future expansions • Remote Management: InControl offers real-time monitoring and control</p>
+    </div>
+
+    <div class="notes-section">
+      <h2 class="section-title">Important Notes</h2>
+      <div class="notes-list">
+        <ul>
+          <li><b>Note 1:</b> Solution supports approximately 60 users across 4 remote sites with high-speed satellite internet.</li>
+          <li><b>Note 2:</b> Starlink dishes require unobstructed sky view for optimal performance.</li>
+          <li><b>Note 3:</b> Peplink routers provide redundancy and load balancing capabilities.</li>
+          <li><b>Note 4:</b> Network extensions include Cat6 cabling and proper conduit installation.</li>
+          <li><b>Note 5:</b> InControl2 cloud management enables remote monitoring and troubleshooting.</li>
+          <li><b>Note 6:</b> Implementation includes site survey, installation, configuration, and staff training.</li>
+          <li><b>Note 7:</b> Equipment placement optimized to minimize interference and maximize coverage.</li>
+          <li><b>Note 8:</b> Solution addresses faulty Gen 3 Starlink kit with reliable Gen 2 replacement.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="total-section">
+      <!--<div>
+        <p>Fred Rwigamba</p>
+        <p>0788306741</p>
+        <p>fred.rwigamba@zubabroadband.com</p>
+      </div>
+      <div>
+        <p>Roland Dunee</p>
+        <p>0793092180</p>
+        <p>dunee.roland@zubabroadband.com</p>
+      </div>
+      <div>
+        <p>Technical Team</p>
+        <p>Zuba Broadband Limited</p>
+        <p>Date: June 18, 2025</p>
+      </div>
+    </div>-->
+  </div>
+</body>
+</html>
