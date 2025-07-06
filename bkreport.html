@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank of Kigali Internet Data Usage Report - Daily Breakdown</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        .card { 
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            margin-bottom: 24px; 
+            padding: 20px; 
+            border: 1px solid #e2e8f0;
+        }
+
+        .header {
+            background-color: #1a237e;
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .chart-container { 
+            position: relative; 
+            height: 400px; 
+            width: 100%; 
+            margin-bottom: 20px; 
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 0.9rem;
+        }
+
+        th, td { 
+            padding: 8px 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #e2e8f0; 
+        }
+
+        thead { 
+            background-color: #f1f5f9; 
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        tr:hover { 
+            background-color: #f8f9fa; 
+        }
+
+        .usage-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .kit-1-value {
+            color: #ff9800;
+        }
+
+        .kit-2-value {
+            color: #e65100;
+        }
+
+        .zero-usage {
+            color: #999;
+            font-style: italic;
+        }
+
+        .high-usage {
+            background-color: #fff3e0;
+        }
+
+        .section-title {
+            color: #1a237e;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .summary-stats {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background-color: #1a237e;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .monthly-section {
+            margin-bottom: 30px;
+        }
+
+        .monthly-title {
+            color: #1a237e;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .date-column {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #1a237e;
+            background-color: #ffffff;
+            color: #1a237e;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background-color: #1a237e;
+            color: #ffffff;
+        }
+
+        .filter-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .filter-btn.active:hover {
+            background-color: #303f9f;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            body {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 6px 8px;
+            }
+        }
+
+        @media print { 
+            body { 
+                background-color: white; 
+            } 
+            .card { 
+                box-shadow: none; 
+                border: 1px solid #e2e8f0; 
+            } 
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Bank of Kigali Internet Data Usage Report</h1>
+        <p>Daily Usage Breakdown for Kits 1 and 2</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">Generated on <span id="currentDate"></span></p>
+    </div>
+
+    <div class="summary-stats">
+        <h2 class="section-title">Executive Summary</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value kit-1-value">3,074.6 GB</div>
+                <div class="stat-label">Kit 1 Total Usage</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value kit-2-value">1,781.4 GB</div>
+                <div class="stat-label">Kit 2 Total Usage</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" style="color: #1a237e;">4,856.0 GB</div>
+                <div class="stat-label">Combined Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" style="color: #1a237e;">Jun 2025</div>
+                <div class="stat-label">Peak Usage Month</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="card">
+        <h2 class="section-title">Monthly Usage Summary</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Kit 1 Usage</th>
+                        <th>Kit 2 Usage</th>
+                        <th>Total Usage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="date-column">January 2025</td>
+                        <td class="usage-value kit-1-value">345.1 GB</td>
+                        <td class="usage-value kit-2-value">0.0 GB</td>
+                        <td class="usage-value">345.1 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="date-column">February 2025</td>
+                        <td class="usage-value kit-1-value">384.5 GB</td>
+                        <td class="usage-value kit-2-value">1.1 GB</td>
+                        <td class="usage-value">385.6 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="date-column">March 2025</td>
+                        <td class="usage-value kit-1-value">732.0 GB</td>
+                        <td class="usage-value kit-2-value">519.0 GB</td>
+                        <td class="usage-value">1,251.0 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="date-column">April 2025</td>
+                        <td class="usage-value kit-1-value">617.9 GB</td>
+                        <td class="usage-value kit-2-value">647.5 GB</td>
+                        <td class="usage-value">1,265.4 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="date-column">May 2025</td>
+                        <td class="usage-value kit-1-value">0.4 GB</td>
+                        <td class="usage-value kit-2-value">1.2 GB</td>
+                        <td class="usage-value">1.6 GB</td>
+                    </tr>
+                    <tr class="high-usage">
+                        <td class="date-column">June 2025</td>
+                        <td class="usage-value kit-1-value">972.4 GB</td>
+                        <td class="usage-value kit-2-value">574.8 GB</td>
+                        <td class="usage-value">1,547.2 GB</td>
+                    </tr>
+                    <tr>
+                        <td class="date-column">July 2025 (Partial)</td>
+                        <td class="usage-value kit-1-value">22.3 GB</td>
+                        <td class="usage-value kit-2-value">37.8 GB</td>
+                        <td class="usage-value">60.1 GB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">Daily Usage Trend Analysis</h2>
+        <div class="chart-container">
+            <canvas id="dailyTrendChart"></canvas>
+        </div>
+        <div class="note">
+            <strong>Note:</strong> This chart shows daily usage patterns over time. Hover over data points to see exact values. Notable peaks include June 19 (Kit 2: 135 GB) and June 27 (Kit 1: 190 GB).
+        </div>
+    </section>
+
+    <section class="card">
+        <h2 class="section-title">Daily Usage Data</h2>
+        <div class="controls">
+            <button class="filter-btn active" onclick="showAllData()">Show All</button>
+            <button class="filter-btn" onclick="showNonZeroOnly()">Non-Zero Only</button>
+            <button class="filter-btn" onclick="showHighUsageOnly()">High Usage (>50GB)</button>
+        </div>
+        <div class="table-container" id="dailyDataTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Kit 1 Usage (GB)</th>
+                        <th>Kit 2 Usage (GB)</th>
+                        <th>Total Daily Usage (GB)</th>
+                    </tr>
+                </thead>
+                <tbody id="dailyTableBody">
+                    <!-- Daily data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div class="note">
+            <strong>Note:</strong> Use the filter buttons above to view different subsets of the data. The table is scrollable and shows all daily usage from January 13, 2025 to July 5, 2025.
+        </div>
+    </section>
+
+    <div class="footer">
+        <p>&copy; 2025 Zuba Broadband. Bank of Kigali Internet Data Usage Report - Daily Breakdown</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">This report contains confidential information for Bank of Kigali.</p>
+    </div>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Daily usage data
+        const dailyData = [
+            {"date": "Jan 13, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 14, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 15, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 16, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 17, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 18, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 19, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 20, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 21, 2025", "kit1": 0.7, "kit2": 0.0},
+            {"date": "Jan 22, 2025", "kit1": 5.8, "kit2": 0.0},
+            {"date": "Jan 23, 2025", "kit1": 60.0, "kit2": 0.0},
+            {"date": "Jan 24, 2025", "kit1": 26.0, "kit2": 0.0},
+            {"date": "Jan 25, 2025", "kit1": 1.6, "kit2": 0.0},
+            {"date": "Jan 26, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jan 27, 2025", "kit1": 61.0, "kit2": 0.0},
+            {"date": "Jan 28, 2025", "kit1": 52.0, "kit2": 0.0},
+            {"date": "Jan 29, 2025", "kit1": 49.0, "kit2": 0.0},
+            {"date": "Jan 30, 2025", "kit1": 58.0, "kit2": 0.0},
+            {"date": "Jan 31, 2025", "kit1": 31.0, "kit2": 0.0},
+            {"date": "Feb 01, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 02, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 03, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 04, 2025", "kit1": 89.0, "kit2": 0.0},
+            {"date": "Feb 05, 2025", "kit1": 61.0, "kit2": 0.0},
+            {"date": "Feb 06, 2025", "kit1": 67.0, "kit2": 0.0},
+            {"date": "Feb 07, 2025", "kit1": 59.0, "kit2": 0.0},
+            {"date": "Feb 08, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 09, 2025", "kit1": 2.4, "kit2": 0.0},
+            {"date": "Feb 10, 2025", "kit1": 101.0, "kit2": 0.0},
+            {"date": "Feb 11, 2025", "kit1": 5.1, "kit2": 1.1},
+            {"date": "Feb 12, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 13, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 14, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 15, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 16, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 17, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 18, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 19, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 20, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 21, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 22, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 23, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 24, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 25, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 26, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 27, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Feb 28, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 01, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 02, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 03, 2025", "kit1": 7.4, "kit2": 3.9},
+            {"date": "Mar 04, 2025", "kit1": 0.8, "kit2": 0.0},
+            {"date": "Mar 05, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 06, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 07, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 08, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 09, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 10, 2025", "kit1": 0.2, "kit2": 0.0},
+            {"date": "Mar 11, 2025", "kit1": 39.0, "kit2": 29.0},
+            {"date": "Mar 12, 2025", "kit1": 50.0, "kit2": 56.0},
+            {"date": "Mar 13, 2025", "kit1": 50.0, "kit2": 41.0},
+            {"date": "Mar 14, 2025", "kit1": 42.0, "kit2": 25.0},
+            {"date": "Mar 15, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 16, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 17, 2025", "kit1": 56.0, "kit2": 29.0},
+            {"date": "Mar 18, 2025", "kit1": 48.0, "kit2": 46.0},
+            {"date": "Mar 19, 2025", "kit1": 35.0, "kit2": 31.0},
+            {"date": "Mar 20, 2025", "kit1": 37.0, "kit2": 33.0},
+            {"date": "Mar 21, 2025", "kit1": 43.0, "kit2": 27.0},
+            {"date": "Mar 22, 2025", "kit1": 43.0, "kit2": 4.0},
+            {"date": "Mar 23, 2025", "kit1": 43.0, "kit2": 2.6},
+            {"date": "Mar 24, 2025", "kit1": 43.0, "kit2": 25.0},
+            {"date": "Mar 25, 2025", "kit1": 43.0, "kit2": 26.0},
+            {"date": "Mar 26, 2025", "kit1": 29.0, "kit2": 37.0},
+            {"date": "Mar 27, 2025", "kit1": 44.0, "kit2": 48.0},
+            {"date": "Mar 28, 2025", "kit1": 78.0, "kit2": 55.0},
+            {"date": "Mar 29, 2025", "kit1": 0.6, "kit2": 0.5},
+            {"date": "Mar 30, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Mar 31, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 01, 2025", "kit1": 62.0, "kit2": 47.0},
+            {"date": "Apr 02, 2025", "kit1": 32.0, "kit2": 34.0},
+            {"date": "Apr 03, 2025", "kit1": 32.0, "kit2": 37.0},
+            {"date": "Apr 04, 2025", "kit1": 30.0, "kit2": 29.0},
+            {"date": "Apr 05, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 06, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 07, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 08, 2025", "kit1": 40.0, "kit2": 51.0},
+            {"date": "Apr 09, 2025", "kit1": 44.0, "kit2": 49.0},
+            {"date": "Apr 10, 2025", "kit1": 44.0, "kit2": 45.0},
+            {"date": "Apr 11, 2025", "kit1": 20.0, "kit2": 18.0},
+            {"date": "Apr 12, 2025", "kit1": 1.2, "kit2": 0.3},
+            {"date": "Apr 13, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 14, 2025", "kit1": 46.0, "kit2": 51.0},
+            {"date": "Apr 15, 2025", "kit1": 41.0, "kit2": 40.0},
+            {"date": "Apr 16, 2025", "kit1": 50.0, "kit2": 60.0},
+            {"date": "Apr 17, 2025", "kit1": 45.0, "kit2": 42.0},
+            {"date": "Apr 18, 2025", "kit1": 0.6, "kit2": 1.1},
+            {"date": "Apr 19, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 20, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 21, 2025", "kit1": 6.1, "kit2": 0.1},
+            {"date": "Apr 22, 2025", "kit1": 52.0, "kit2": 54.0},
+            {"date": "Apr 23, 2025", "kit1": 48.0, "kit2": 67.0},
+            {"date": "Apr 24, 2025", "kit1": 24.0, "kit2": 22.0},
+            {"date": "Apr 25, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 26, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 27, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 28, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 29, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Apr 30, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 01, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 02, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 03, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 04, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 05, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 06, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 07, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 08, 2025", "kit1": 0.1, "kit2": 0.5},
+            {"date": "May 09, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 10, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 11, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 12, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 13, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 14, 2025", "kit1": 0.1, "kit2": 0.3},
+            {"date": "May 15, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 16, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 17, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 18, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 19, 2025", "kit1": 0.1, "kit2": 0.1},
+            {"date": "May 20, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 21, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 22, 2025", "kit1": 0.0, "kit2": 0.3},
+            {"date": "May 23, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 24, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 25, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 26, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 27, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 28, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 29, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "May 30, 2025", "kit1": 0.1, "kit2": 0.0},
+            {"date": "May 31, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 01, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 02, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 03, 2025", "kit1": 0.2, "kit2": 0.0},
+            {"date": "Jun 04, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 05, 2025", "kit1": 0.3, "kit2": 0.6},
+            {"date": "Jun 06, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 07, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 08, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 09, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 10, 2025", "kit1": 0.2, "kit2": 0.0},
+            {"date": "Jun 11, 2025", "kit1": 0.1, "kit2": 0.0},
+            {"date": "Jun 12, 2025", "kit1": 0.2, "kit2": 0.0},
+            {"date": "Jun 13, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 14, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 15, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 16, 2025", "kit1": 0.5, "kit2": 0.8},
+            {"date": "Jun 17, 2025", "kit1": 2.3, "kit2": 5.4},
+            {"date": "Jun 18, 2025", "kit1": 76.0, "kit2": 77.0},
+            {"date": "Jun 19, 2025", "kit1": 107.0, "kit2": 135.0},
+            {"date": "Jun 20, 2025", "kit1": 90.0, "kit2": 91.0},
+            {"date": "Jun 21, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 22, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 23, 2025", "kit1": 0.0, "kit2": 0.0},
+            {"date": "Jun 24, 2025", "kit1": 56.0, "kit2": 50.0},
+            {"date": "Jun 25, 2025", "kit1": 97.0, "kit2": 82.0},
+            {"date": "Jun 26, 2025", "kit1": 142.0, "kit2": 104.0},
+            {"date": "Jun 27, 2025", "kit1": 190.0, "kit2": 0.0},
+            {"date": "Jun 28, 2025", "kit1": 17.0, "kit2": 0.0},
+            {"date": "Jun 29, 2025", "kit1": 5.6, "kit2": 0.0},
+            {"date": "Jun 30, 2025", "kit1": 188.0, "kit2": 29.0},
+            {"date": "Jul 01, 2025", "kit1": 1.6, "kit2": 9.1},
+            {"date": "Jul 02, 2025", "kit1": 2.4, "kit2": 4.3},
+            {"date": "Jul 03, 2025", "kit1": 7.4, "kit2": 8.6},
+            {"date": "Jul 04, 2025", "kit1": 5.7, "kit2": 6.6},
+            {"date": "Jul 05, 2025", "kit1": 5.2, "kit2": 9.2}
+        ];
+
+        // Chart colors
+        const kit1Color = '#ff9800';
+        const kit2Color = '#e65100';
+
+        // Daily Trend Chart
+        const dailyCtx = document.getElementById('dailyTrendChart').getContext('2d');
+        const dailyTrendChart = new Chart(dailyCtx, {
+            type: 'line',
+            data: {
+                labels: dailyData.map(d => d.date),
+                datasets: [{
+                    label: 'Kit 1 Usage (GB)',
+                    data: dailyData.map(d => d.kit1),
+                    borderColor: kit1Color,
+                    backgroundColor: kit1Color + '20',
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                }, {
+                    label: 'Kit 2 Usage (GB)',
+                    data: dailyData.map(d => d.kit2),
+                    borderColor: kit2Color,
+                    backgroundColor: kit2Color + '20',
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        },
+                        ticks: {
+                            maxTicksLimit: 20
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Data Usage (GB)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Daily Data Usage Trends - Bank of Kigali Kits',
+                        font: { size: 16 }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // Populate daily data table
+        function populateTable(data) {
+            const tbody = document.getElementById('dailyTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                const total = row.kit1 + row.kit2;
+                
+                // Add high usage class if total > 100GB
+                if (total > 100) {
+                    tr.classList.add('high-usage');
+                }
+                
+                tr.innerHTML = `
+                    <td class="date-column">${row.date}</td>
+                    <td class="usage-value kit-1-value ${row.kit1 === 0 ? 'zero-usage' : ''}">${row.kit1.toFixed(1)}</td>
+                    <td class="usage-value kit-2-value ${row.kit2 === 0 ? 'zero-usage' : ''}">${row.kit2.toFixed(1)}</td>
+                    <td class="usage-value">${total.toFixed(1)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filter functions
+        function showAllData() {
+            populateTable(dailyData);
+            updateActiveButton(0);
+        }
+
+        function showNonZeroOnly() {
+            const nonZeroData = dailyData.filter(row => row.kit1 > 0 || row.kit2 > 0);
+            populateTable(nonZeroData);
+            updateActiveButton(1);
+        }
+
+        function showHighUsageOnly() {
+            const highUsageData = dailyData.filter(row => row.kit1 > 50 || row.kit2 > 50);
+            populateTable(highUsageData);
+            updateActiveButton(2);
+        }
+
+        function updateActiveButton(activeIndex) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach((btn, index) => {
+                if (index === activeIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize table with all data
+        showAllData();
+    </script>
+</body>
+</html>
+
